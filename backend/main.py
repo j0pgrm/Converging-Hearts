@@ -248,3 +248,7 @@ def home():
 embeddings = np.load(
     "data/description_embeddings.npy"
 )
+
+full_cases_df = pd.read_json(
+    "data/output.json"
+)
