@@ -880,7 +880,7 @@
                 ).style.display = "flex";
 
                 const response = await fetch(
-                    "http://127.0.0.1:8000/full-cases"
+                    "https://converging-hearts.onrender.com/full-cases"
                 );
 
                 allCases = await response.json();
@@ -922,7 +922,7 @@
                     "${query}"`;
 
                 const response = await fetch(
-                    `http://127.0.0.1:8000/search?query=${encodeURIComponent(query)}&top_n=20`
+                    `https://converging-hearts.onrender.com/search?query=${encodeURIComponent(query)}&top_n=20`
                 );
 
                 const cases = await response.json();

@@ -49,9 +49,11 @@ embeddings = np.load(
 )
 
 # Embedding model
-model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
-)
+# model = SentenceTransformer(
+#     "all-MiniLM-L6-v2"
+# )
+
+model = None 
 
 
 # =====================================================
@@ -172,38 +174,45 @@ def find_similar_cases(
 # SEMANTIC SEARCH
 # =====================================================
 
+# @app.get("/search")
+# def semantic_search(
+#     query: str,
+#     top_n: int = 5
+# ):
+
+#     # Convert query to embedding
+#     query_embedding = model.encode(
+#         [query]
+#     )
+
+#     # Similarities
+#     similarities = cosine_similarity(
+#         query_embedding,
+#         embeddings
+#     )[0]
+
+#     # Top matches
+#     top_indices = similarities.argsort()[
+#         -top_n:
+#     ][::-1]
+
+#     results = df.iloc[top_indices][[
+#         "id",
+#         "description",
+#         "topic_category"
+#     ]].copy()
+
+#     results["similarity_score"] = (
+#         similarities[top_indices]
+#     )
+
+#     return results.to_dict(
+#         orient="records"
+#     )
+
 @app.get("/search")
-def semantic_search(
-    query: str,
-    top_n: int = 5
-):
+def semantic_search():
 
-    # Convert query to embedding
-    query_embedding = model.encode(
-        [query]
-    )
-
-    # Similarities
-    similarities = cosine_similarity(
-        query_embedding,
-        embeddings
-    )[0]
-
-    # Top matches
-    top_indices = similarities.argsort()[
-        -top_n:
-    ][::-1]
-
-    results = df.iloc[top_indices][[
-        "id",
-        "description",
-        "topic_category"
-    ]].copy()
-
-    results["similarity_score"] = (
-        similarities[top_indices]
-    )
-
-    return results.to_dict(
-        orient="records"
-    )
+    return {
+        "message": "Search temporarily disabled"
+    }

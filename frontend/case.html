@@ -582,7 +582,7 @@
             try {
 
                 const response = await fetch(
-                    `http://127.0.0.1:8000/full-cases/${caseId}`
+                    `https://converging-hearts.onrender.com/full-cases/${caseId}`
                 );
 
                 const caseData = await response.json();
@@ -675,7 +675,7 @@
                 // ============================================
 
                 const categorizedResponse = await fetch(
-                    `http://127.0.0.1:8000/cases/${caseId}`
+                    `https://converging-hearts.onrender.com/cases/${caseId}`
                 );
 
                 const categorizedData =
@@ -709,7 +709,7 @@
             try {
 
                 const response = await fetch(
-                    `http://127.0.0.1:8000/similar/${caseId}?top_n=6`
+                    `https://converging-hearts.onrender.com/similar/${caseId}?top_n=6`
                 );
 
                 const similarCases =
