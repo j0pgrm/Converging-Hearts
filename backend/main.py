@@ -230,10 +230,17 @@
 
 
 from fastapi import FastAPI
+
 import pandas as pd
 import numpy as np
 
+from sentence_transformers import SentenceTransformer
+
 app = FastAPI()
+
+# ==========================================
+# LOAD DATA
+# ==========================================
 
 df = pd.read_json(
     "data/categorized_cases.json"
@@ -259,8 +266,21 @@ full_cases_df = full_cases_df.replace(
     {np.nan: None}
 )
 
+# ==========================================
+# TEST MODEL LOAD
+# ==========================================
+
+model = SentenceTransformer(
+    "all-MiniLM-L6-v2"
+)
+
+# ==========================================
+# TEST ROUTE
+# ==========================================
+
 @app.get("/")
 def home():
+
     return {
         "message": "Backend working"
     }
