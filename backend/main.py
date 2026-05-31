@@ -36,8 +36,6 @@ embeddings = np.load(
     "data/description_embeddings.npy"
 )
 
-# IMPORTANT
-model = None
 
 @app.get("/")
 def home():
@@ -96,9 +94,17 @@ def find_similar_cases(
     top_n: int = 5
 ):
 
-    case_index = df.index[
+    matching_rows = df.index[
         df["id"] == case_id
-    ][0]
+    ]
+
+    if len(matching_rows) == 0:
+
+        return {
+            "error": "Case not found"
+        }
+
+    case_index = matching_rows[0]
 
     case_embedding = embeddings[
         case_index
@@ -129,47 +135,47 @@ def find_similar_cases(
         orient="records"
     )
 
-@app.get("/search")
-def semantic_search(
-    query: str,
-    top_n: int = 5
-):
+# @app.get("/search")
+# def semantic_search(
+#     query: str,
+#     top_n: int = 5
+# ):
 
-    global model
+#     global model
 
-    if model is None:
+#     if model is None:
 
-        print(
-            "Loading SentenceTransformer..."
-        )
+#         print(
+#             "Loading SentenceTransformer..."
+#         )
 
-        model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
-        )
+#         model = SentenceTransformer(
+#             "all-MiniLM-L6-v2"
+#         )
 
-    query_embedding = model.encode(
-        [query]
-    )
+#     query_embedding = model.encode(
+#         [query]
+#     )
 
-    similarities = cosine_similarity(
-        query_embedding,
-        embeddings
-    )[0]
+#     similarities = cosine_similarity(
+#         query_embedding,
+#         embeddings
+#     )[0]
 
-    top_indices = similarities.argsort()[
-        -top_n:
-    ][::-1]
+#     top_indices = similarities.argsort()[
+#         -top_n:
+#     ][::-1]
 
-    results = df.iloc[top_indices][[
-        "id",
-        "description",
-        "topic_category"
-    ]].copy()
+#     results = df.iloc[top_indices][[
+#         "id",
+#         "description",
+#         "topic_category"
+#     ]].copy()
 
-    results["similarity_score"] = (
-        similarities[top_indices]
-    )
+#     results["similarity_score"] = (
+#         similarities[top_indices]
+#     )
 
-    return results.to_dict(
-        orient="records"
-    )
+#     return results.to_dict(
+#         orient="records"
+#     )
