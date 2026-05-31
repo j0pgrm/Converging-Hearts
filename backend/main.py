@@ -255,6 +255,10 @@ full_cases_df = pd.read_json(
     "data/output.json"
 )
 
+full_cases_df = full_cases_df.replace(
+    {np.nan: None}
+)
+
 @app.get("/")
 def home():
     return {
