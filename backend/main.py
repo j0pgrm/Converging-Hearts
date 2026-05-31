@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import numpy as np
 
-from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
 app = FastAPI()
