@@ -66,16 +66,10 @@ def get_query_embedding(text):
         timeout=30
     )
 
-    # response.raise_for_status()
-
-    # return response.json()
-
-    print("STATUS:", response.status_code)
-    print("RESPONSE:", response.text)
-
-    response.raise_for_status()
-
-    return response.json()
+    return {
+        "status": response.status_code,
+        "text": response.text
+    }
 
 
 # 
@@ -182,35 +176,43 @@ def find_similar_cases(
 
 
 
+# @app.get("/search")
+# def semantic_search(
+#     query: str,
+#     top_n: int = 20
+# ):
+
+#     query_embedding = np.array(
+#         get_query_embedding(query)
+#     ).reshape(1, -1)
+
+#     similarities = cosine_similarity(
+#         query_embedding,
+#         embeddings
+#     )[0]
+
+#     top_indices = similarities.argsort()[
+#         -top_n:
+#     ][::-1]
+
+#     results = df.iloc[top_indices][[
+#         "id",
+#         "description",
+#         "topic_category"
+#     ]].copy()
+
+#     results["similarity_score"] = (
+#         similarities[top_indices]
+#     )
+
+#     return results.to_dict(
+#         orient="records"
+#     )
+
 @app.get("/search")
 def semantic_search(
     query: str,
     top_n: int = 20
 ):
 
-    query_embedding = np.array(
-        get_query_embedding(query)
-    ).reshape(1, -1)
-
-    similarities = cosine_similarity(
-        query_embedding,
-        embeddings
-    )[0]
-
-    top_indices = similarities.argsort()[
-        -top_n:
-    ][::-1]
-
-    results = df.iloc[top_indices][[
-        "id",
-        "description",
-        "topic_category"
-    ]].copy()
-
-    results["similarity_score"] = (
-        similarities[top_indices]
-    )
-
-    return results.to_dict(
-        orient="records"
-    )
+    return get_query_embedding(query)
