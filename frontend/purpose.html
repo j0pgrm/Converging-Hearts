@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Purpose | Converging Hearts</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="img/converging-hearts-logo.png"
+    />
+
+    <link
+        rel="stylesheet"
+        href="css/bootstrap.min.css"
+    />
+
+    <link
+        rel="stylesheet"
+        href="fontawesome/css/all.min.css"
+    />
+
+    <link
+        rel="stylesheet"
+        href="css/templatemo-style.css"
+    />
+
+    <style>
+
+        .custom-navbar {
+
+            background-color: white;
+
+            box-shadow:
+                0 2px 10px rgba(0,0,0,0.08);
+
+            padding:
+                15px 0;
+        }
+
+        .custom-navbar .navbar-brand {
+
+            font-size: 1.5rem;
+
+            color: #1f4f82;
+
+            font-weight: 700;
+        }
+
+        .custom-navbar .nav-link {
+
+            color: #333;
+
+            font-weight: 500;
+
+            margin-left: 20px;
+
+            transition: 0.2s;
+        }
+
+        .custom-navbar .nav-link:hover {
+
+            color: #1f4f82;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .hero-section {
+
+            background-image: linear-gradient(
+                rgba(0,0,0,0.65),
+                rgba(0,0,0,0.65)
+            ),
+            url("img/main-pic.jpg");
+
+            background-size: cover;
+            background-position: center;
+
+            height: 350px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+            text-align: center;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .hero-subtitle {
+            max-width: 800px;
+            margin-top: 15px;
+            font-size: 1.15rem;
+        }
+
+        .content-container {
+            max-width: 1100px;
+            margin: 60px auto;
+        }
+
+        .content-card {
+
+            background: white;
+
+            padding: 50px;
+
+            border-radius: 14px;
+
+            box-shadow:
+                0 4px 12px rgba(0,0,0,0.08);
+
+        }
+
+        .section-title {
+
+            font-size: 2rem;
+
+            font-weight: 700;
+
+            margin-top: 50px;
+
+            margin-bottom: 20px;
+
+            color: #17457A;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .content-card p {
+
+            font-size: 1.08rem;
+
+            line-height: 1.9;
+
+            color: #444;
+
+            margin-bottom: 22px;
+        }
+
+        .mission-box {
+
+            background: #f8f9fa;
+
+            border-left: 5px solid #17457A;
+
+            padding: 25px;
+
+            border-radius: 8px;
+
+            margin: 30px 0;
+        }
+
+        .mission-box h4 {
+
+            font-weight: 700;
+
+            margin-bottom: 15px;
+
+            color: #17457A;
+        }
+
+        .resource-box {
+
+            margin-top: 40px;
+
+            background: #eef5ff;
+
+            padding: 25px;
+
+            border-radius: 10px;
+        }
+
+        .resource-box h4 {
+
+            margin-bottom: 15px;
+
+            font-weight: 700;
+        }
+
+        .resource-box a {
+
+            color: #17457A;
+
+            font-weight: 600;
+        }
+
+        @media(max-width:768px) {
+
+            .content-card {
+                padding: 30px;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+        }
+
+        /* ==========================================
+        HAMBURGER BUTTON
+        ========================================== */
+
+        .menu-btn {
+
+            display: none;
+
+            background: none;
+            border: none;
+
+            font-size: 1.8rem;
+
+            color: #1b4d89;
+        }
+
+
+        /* ==========================================
+        MOBILE SIDEBAR
+        ========================================== */
+
+        .mobile-sidebar {
+
+            position: fixed;
+
+            top: 0;
+            right: -300px;
+
+            width: 300px;
+            height: 100vh;
+
+            background: white;
+
+            box-shadow:
+                -5px 0 20px rgba(0,0,0,0.15);
+
+            z-index: 9999;
+
+            transition: 0.3s ease;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 30px;
+        }
+
+        .mobile-sidebar.open {
+            right: 0;
+        }
+
+        .mobile-sidebar a {
+
+            padding: 15px 0;
+
+            text-decoration: none;
+
+            color: #222;
+
+            font-size: 1.1rem;
+
+            font-weight: 500;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-header {
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .sidebar-header button {
+
+            background: none;
+            border: none;
+
+            font-size: 1.5rem;
+        }
+
+
+        /* ==========================================
+        OVERLAY
+        ========================================== */
+
+        .sidebar-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,0.45);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transition: 0.3s ease;
+
+            z-index: 9998;
+        }
+
+        .sidebar-overlay.show {
+
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* ==========================================
+        MOBILE NAVIGATION
+        ========================================== */
+
+        @media (max-width: 768px) {
+
+            .navbar-nav {
+                display: none;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg custom-navbar">
+
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="index.html">
+                Converging Hearts
+            </a>
+
+            <button
+                class="menu-btn"
+                id="menu-btn"
+            >
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div
+                class="collapse navbar-collapse"
+                id="mainNavbar"
+            >
+
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="index.html"
+                        >
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="purpose.html"
+                        >
+                            Purpose
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="https://github.com/yourusername/project"
+                            target="_blank"
+                        >
+                            GitHub
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- Mobile Sidebar -->
+
+    <div
+        class="mobile-sidebar"
+        id="mobile-sidebar"
+    >
+
+        <div class="sidebar-header">
+
+            <h4>
+                Converging Hearts
+            </h4>
+
+            <button id="close-sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+
+        </div>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="purpose.html">
+            Purpose
+        </a>
+
+        <a
+            href="https://github.com/yourusername/project"
+            target="_blank"
+        >
+            GitHub
+        </a>
+
+    </div>
+
+    <div
+        class="sidebar-overlay"
+        id="sidebar-overlay"
+    ></div>
+
+    <!-- HERO -->
+
+    <div class="hero-section">
+
+        <h1 class="hero-title">
+            Why Converging Hearts Exists
+        </h1>
+
+        <p class="hero-subtitle">
+            A project built to help families discover that
+            they may not be alone in the way their loved one disappeared.
+        </p>
+
+    </div>
+
+    <!-- CONTENT -->
+
+    <div class="container content-container">
+
+        <div class="content-card">
+
+            <h2 class="section-title">
+                A Different Kind of Missing Person Project
+            </h2>
+
+            <p>
+                When a loved one goes missing, families are often left with more
+                questions than answers. Days become weeks. Weeks become months.
+                Months become years.
+            </p>
+
+            <p>
+                For many families, one of the most difficult emotions is loneliness.
+                Not simply the loneliness of missing someone they love, but the feeling
+                that nobody truly understands what happened.
+            </p>
+
+            <p>
+                Every disappearance has its own story. Every family carries its own
+                unanswered questions. Every case leaves behind a unique kind of grief.
+            </p>
+
+            <p>
+                Converging Hearts was created to help families discover that they may
+                not be alone in those experiences.
+            </p>
+
+            <h2 class="section-title">
+                The Idea Behind Converging Hearts
+            </h2>
+
+            <p>
+                Across the United States, thousands of missing person cases have been
+                documented through public databases such as NamUs.
+            </p>
+
+            <p>
+                While every case is unique, many disappearances share remarkably
+                similar circumstances.
+            </p>
+
+            <p>
+                Some individuals disappeared after abandoning a vehicle.
+                Some vanished while hiking alone.
+                Some walked away from home and never returned.
+                Some disappeared during a mental health crisis.
+                Others were last seen near bodies of water or remote wilderness areas.
+            </p>
+
+            <p>
+                These similarities are often difficult to see because cases are
+                separated by geography, time, and jurisdiction.
+            </p>
+
+            <p>
+                Converging Hearts uses machine learning and natural language processing
+                to identify missing person cases whose circumstances of disappearance
+                are semantically similar.
+            </p>
+
+            <div class="mission-box">
+
+                <h4>
+                    Important
+                </h4>
+
+                <p style="margin-bottom:0;">
+                    Similarity does not mean the cases are connected.
+                    Similarity does not establish facts.
+                    Similarity does not solve cases.
+                </p>
+
+            </div>
+
+            <h2 class="section-title">
+                Why Similarity Matters
+            </h2>
+
+            <p>
+                There is a difference between grieving with someone who has experienced
+                loss and grieving with someone whose loved one disappeared in a
+                remarkably similar way.
+            </p>
+
+            <p>
+                Families often find themselves trying to explain highly specific
+                circumstances that most people have never experienced.
+            </p>
+
+            <p>
+                A family whose loved one disappeared after abandoning a vehicle may
+                feel understood by another family facing the same questions.
+            </p>
+
+            <p>
+                A family whose loved one vanished while camping or hiking may connect
+                with another family navigating that same uncertainty.
+            </p>
+
+            <p>
+                A family dealing with a disappearance during a mental health crisis may
+                find comfort speaking with others who understand those circumstances.
+            </p>
+
+            <p>
+                Shared circumstances do not create answers.
+                But they can create understanding.
+                And understanding can create connection.
+            </p>
+
+            <h2 class="section-title">
+                What This Project Is Not
+            </h2>
+
+            <p>
+                Converging Hearts is not intended to replace law enforcement,
+                investigators, search organizations, or the NamUs system.
+            </p>
+
+            <p>
+                This website does not determine what happened to any missing person.
+                It does not draw conclusions.
+                It does not identify suspects.
+                It does not establish facts.
+            </p>
+
+            <p>
+                The similarity results displayed throughout this website are generated
+                using machine learning models that analyze publicly available case
+                descriptions and identify cases that share similar language and
+                circumstances.
+            </p>
+
+            <h2 class="section-title">
+                The Mission
+            </h2>
+
+            <p>
+                The mission of Converging Hearts is simple:
+            </p>
+
+            <div class="mission-box">
+
+                <h4>
+                    To help families discover that they may not be alone.
+                </h4>
+
+                <p style="margin-bottom:0;">
+                    If this project helps even one family find someone who truly
+                    understands what they are going through, then it has served
+                    its purpose.
+                </p>
+
+            </div>
+
+            <p>
+                Behind every case number is a person.
+            </p>
+
+            <p>
+                Behind every person is a family.
+            </p>
+
+            <p>
+                And behind every family is a story that deserves to be remembered.
+            </p>
+
+            <p>
+                Converging Hearts exists to help those stories find one another.
+            </p>
+
+            <div class="resource-box">
+
+                <h4>
+                    Resources
+                </h4>
+
+                <p>
+                    <strong>NamUs</strong><br>
+                    National Missing and Unidentified Persons System
+                </p>
+
+                <p>
+                    Phone:
+                    <strong>1-833-872-5176</strong>
+                </p>
+
+                <p>
+                    Website:
+                    <br>
+                    <a
+                        href="https://namus.nij.ojp.gov/"
+                        target="_blank"
+                    >
+                        https://namus.nij.ojp.gov/
+                    </a>
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+<script>
+
+    const menuBtn =
+        document.getElementById(
+            "menu-btn"
+        );
+
+    const sidebar =
+        document.getElementById(
+            "mobile-sidebar"
+        );
+
+    const overlay =
+        document.getElementById(
+            "sidebar-overlay"
+        );
+
+    const closeBtn =
+        document.getElementById(
+            "close-sidebar"
+        );
+
+
+    menuBtn.addEventListener(
+        "click",
+        () => {
+
+            sidebar.classList.add(
+                "open"
+            );
+
+            overlay.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+    closeBtn.addEventListener(
+        "click",
+        closeSidebar
+    );
+
+    overlay.addEventListener(
+        "click",
+        closeSidebar
+    );
+
+    function closeSidebar() {
+
+        sidebar.classList.remove(
+            "open"
+        );
+
+        overlay.classList.remove(
+            "show"
+        );
+
+    }
+
+</script>

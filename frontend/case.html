@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>Missing Person Case</title>
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="img/converging-hearts-logo.png"
+    />
+
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="css/templatemo-style.css" />
+
+    <style>
+
+        /*  */
+        .custom-navbar {
+
+            background-color: white;
+
+            box-shadow:
+                0 2px 10px rgba(0,0,0,0.08);
+
+            padding:
+                15px 0;
+        }
+
+        .custom-navbar .navbar-brand {
+
+            font-size: 1.5rem;
+
+            color: #1f4f82;
+
+            font-weight: 700;
+        }
+
+        .custom-navbar .nav-link {
+
+            color: #333;
+
+            font-weight: 500;
+
+            margin-left: 20px;
+
+            transition: 0.2s;
+        }
+
+        .custom-navbar .nav-link:hover {
+
+            color: #1f4f82;
+        }
+        /*  */
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .case-container {
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+
+        .badge-custom {
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .case-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .case-image {
+            width: 100%;
+            max-width: 350px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .case-title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .section-title {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .similar-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            height: 100%;
+            transition: 0.2s ease;
+            border: 1px solid #ddd;
+        }
+
+        .similar-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .similar-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .similar-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .similar-score {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .info-row {
+            margin-bottom: 10px;
+        }
+
+        .description-box {
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* ==========================================
+        HAMBURGER BUTTON
+        ========================================== */
+
+        .menu-btn {
+
+            display: none;
+
+            background: none;
+            border: none;
+
+            font-size: 1.8rem;
+
+            color: #1b4d89;
+        }
+
+
+        /* ==========================================
+        MOBILE SIDEBAR
+        ========================================== */
+
+        .mobile-sidebar {
+
+            position: fixed;
+
+            top: 0;
+            right: -300px;
+
+            width: 300px;
+            height: 100vh;
+
+            background: white;
+
+            box-shadow:
+                -5px 0 20px rgba(0,0,0,0.15);
+
+            z-index: 9999;
+
+            transition: 0.3s ease;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 30px;
+        }
+
+        .mobile-sidebar.open {
+            right: 0;
+        }
+
+        .mobile-sidebar a {
+
+            padding: 15px 0;
+
+            text-decoration: none;
+
+            color: #222;
+
+            font-size: 1.1rem;
+
+            font-weight: 500;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-header {
+
+            display: flex;
+
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+        .sidebar-header button {
+
+            background: none;
+            border: none;
+
+            font-size: 1.5rem;
+        }
+
+
+        /* ==========================================
+        OVERLAY
+        ========================================== */
+
+        .sidebar-overlay {
+
+            position: fixed;
+
+            inset: 0;
+
+            background:
+                rgba(0,0,0,0.45);
+
+            opacity: 0;
+
+            visibility: hidden;
+
+            transition: 0.3s ease;
+
+            z-index: 9998;
+        }
+
+        .sidebar-overlay.show {
+
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* ==========================================
+        MOBILE NAVIGATION
+        ========================================== */
+
+        @media (max-width: 768px) {
+
+            .navbar-nav {
+                display: none;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg custom-navbar">
+
+        <div class="container">
+
+            <a class="navbar-brand fw-bold" href="index.html">
+                Converging Hearts
+            </a>
+
+            <button
+                class="menu-btn"
+                id="menu-btn"
+            >
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div
+                class="collapse navbar-collapse"
+                id="mainNavbar"
+            >
+
+                <ul class="navbar-nav ms-auto">
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="index.html"
+                        >
+                            Home
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="purpose.html"
+                        >
+                            Purpose
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a
+                            class="nav-link"
+                            href="https://github.com/yourusername/project"
+                            target="_blank"
+                        >
+                            GitHub
+                        </a>
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+    <!-- Mobile Sidebar -->
+
+    <div
+        class="mobile-sidebar"
+        id="mobile-sidebar"
+    >
+
+        <div class="sidebar-header">
+
+            <h4>
+                Converging Hearts
+            </h4>
+
+            <button id="close-sidebar">
+                <i class="fas fa-times"></i>
+            </button>
+
+        </div>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="purpose.html">
+            Purpose
+        </a>
+
+        <a
+            href="https://github.com/yourusername/project"
+            target="_blank"
+        >
+            GitHub
+        </a>
+
+    </div>
+
+    <div
+        class="sidebar-overlay"
+        id="sidebar-overlay"
+    ></div>
+
+    <div class="container case-container">
+
+        <!-- CASE DETAILS -->
+        <div class="case-card">
+
+            <div class="row">
+
+                <div class="col-lg-4 text-center">
+
+                    <img 
+                        id="case-image"
+                        class="case-image"
+                        src=""
+                        alt=""
+                    />
+
+                </div>
+
+                <div class="col-lg-8">
+
+                    <h1 
+                        class="case-title"
+                        id="case-name"
+                    >
+                        Loading...
+                    </h1>
+
+                    <div class="info-row">
+                        <strong>Case ID:</strong>
+                        <span id="case-id"></span>
+                    </div>
+
+                    <div class="info-row">
+                        <strong>Sex:</strong>
+                        <span id="case-sex"></span>
+                    </div>
+
+                    <div class="info-row">
+                        <strong>Ethnicity:</strong>
+                        <span id="case-ethnicity"></span>
+                    </div>
+
+                    <div class="info-row">
+                        <strong>Missing Age:</strong>
+                        <span id="case-age"></span>
+                    </div>
+
+                    <div class="info-row">
+                        <strong>City:</strong>
+                        <span id="case-city"></span>
+                    </div>
+
+                    <div class="info-row">
+                        <strong>State:</strong>
+                        <span id="case-state"></span>
+                    </div>
+
+                    <div class="info-row">
+                        <strong>Category:</strong>
+                        <span id="case-category"></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- DESCRIPTION -->
+            <div class="section-title">
+                Circumstances of Disappearance
+            </div>
+
+            <div 
+                class="description-box"
+                id="case-description"
+            >
+            </div>
+
+        </div>
+
+        <!-- SIMILAR CASES -->
+        <div class="section-title">
+            Similar Cases
+        </div>
+
+        <div 
+            class="row"
+            id="similar-cases-container"
+        >
+        </div>
+
+
+        <!-- SUPPORT / CONNECTION SECTION -->
+
+        <div class="case-card mt-5">
+
+            <div class="section-title">
+                You Are Not Alone
+            </div>
+
+            <div class="description-box">
+
+                <p style="color: rgb(125, 125, 125)">
+                    When a loved one goes missing, one of the hardest emotions
+                    families often experience is loneliness.
+                </p>
+
+                <p style="color: rgb(125, 125, 125)">
+                    It can feel impossible to understand how something like this
+                    could happen, or whether anyone else truly understands what
+                    your family is going through.
+                </p>
+
+                <p style="color: rgb(125, 125, 125)">
+                    This project was created to help show that disappearances are
+                    not always isolated incidents. In many cases, there are other
+                    individuals whose circumstances of disappearance are extremely
+                    similar.
+                </p>
+
+                <p style="color: rgb(125, 125, 125)">
+                    The purpose of this website is not to investigate cases,
+                    draw conclusions, or replace law enforcement. Its purpose 
+                    is to help families realize they may not be alone in the 
+                    way their loved one disappeared.
+                </p>
+
+                <p style="color: rgb(125, 125, 125)">
+                    Grief can already feel isolating, but grieving a disappearance
+                    that happened under unusual or deeply specific circumstances
+                    can feel even more impossible to explain to others.
+                    There is a difference between speaking with someone who has
+                    experienced loss, and speaking with someone whose loved one
+                    vanished in a strikingly similar way.
+                    This project was created in the hope that families may find
+                    understanding, connection, and community through shared
+                    circumstances that are often difficult to put into words.
+                </p>
+
+                <p style="color: rgb(125, 125, 125)">
+                    If you feel this case is emotionally similar to the disappearance
+                    of your loved one and would like to possibly connect with the
+                    family involved, we encourage you to reach out to the
+                    investigating agency handling this case or contact NamUs
+                    directly for additional guidance.
+                </p>
+
+                <hr class="my-4">
+
+                <div class="info-row">
+                    <strong>Investigating Agency:</strong>
+                    <span id="support-agency">
+                        Loading...
+                    </span>
+                </div>
+
+                <div class="info-row mt-2">
+                    <strong>NamUs:</strong>
+                    <span>
+                        National Missing and Unidentified Persons System
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    <strong>Phone:</strong>
+                    <span>
+                        1-833-872-5176
+                    </span>
+                </div>
+
+                <div class="info-row">
+                    <strong>Website:</strong>
+
+                    <a 
+                        href="https://namus.nij.ojp.gov/"
+                        target="_blank"
+                    >
+                        https://namus.nij.ojp.gov/
+                    </a>
+                </div>
+
+            </div>
+
+        </div>        
+
+
+    </div>
+
+
+    <script>
+
+        // ============================================
+        // GET CASE ID FROM URL
+        // ============================================
+
+        const params = new URLSearchParams(
+            window.location.search
+        );
+
+        const caseId = params.get("id");
+
+
+        // ============================================
+        // LOAD CASE DETAILS
+        // ============================================
+
+        async function loadCaseDetails() {
+
+            try {
+
+                const response = await fetch(
+                    `http://127.0.0.1:8000/full-cases/${caseId}`
+                );
+
+                const caseData = await response.json();
+
+                console.log(caseData);
+
+
+                // ============================================
+                // BASIC INFO
+                // ============================================
+
+                const firstName =
+                    caseData["subjectIdentification.firstName"] || "";
+
+                const lastName =
+                    caseData["subjectIdentification.lastName"] || "";
+
+                const fullName =
+                    `${firstName} ${lastName}`.trim();
+
+                
+                document.getElementById(
+                    "support-agency"
+                ).textContent =
+                    caseData["primaryInvestigatingAgency.name"] || "Unknown Agency";
+
+
+                document.getElementById(
+                    "case-name"
+                ).textContent = fullName;
+
+
+                document.getElementById(
+                    "case-id"
+                ).textContent = caseData.id || "Unknown";
+
+
+                document.getElementById(
+                    "case-sex"
+                ).textContent =
+                    caseData["subjectDescription.sex.name"] || "Unknown";
+
+
+                document.getElementById(
+                    "case-ethnicity"
+                ).textContent =
+                    caseData["subjectDescription.primaryEthnicity.name"] || "Unknown";
+
+
+                document.getElementById(
+                    "case-age"
+                ).textContent =
+                    caseData["subjectIdentification.computedMissingMinAge"] || "Unknown";
+
+
+                document.getElementById(
+                    "case-city"
+                ).textContent =
+                    caseData["sighting.address.city"] || "Unknown";
+
+
+                document.getElementById(
+                    "case-state"
+                ).textContent =
+                    caseData["sighting.address.state.name"] || "Unknown";
+
+
+                document.getElementById(
+                    "case-description"
+                ).textContent =
+                    caseData["circumstances.circumstancesOfDisappearance"] || "No description available.";
+
+
+                // ============================================
+                // IMAGE
+                // ============================================
+
+                const imageUrl =
+                    "https://namus.gov" +
+                    caseData.hrefDefaultImagePoster;
+
+
+                document.getElementById(
+                    "case-image"
+                ).src = imageUrl;
+
+
+                // ============================================
+                // LOAD CATEGORY INFO
+                // ============================================
+
+                const categorizedResponse = await fetch(
+                    `http://127.0.0.1:8000/cases/${caseId}`
+                );
+
+                const categorizedData =
+                    await categorizedResponse.json();
+
+
+                document.getElementById(
+                    "case-category"
+                ).textContent =
+                    categorizedData.topic_category || "OTHER";
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error loading case:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // ============================================
+        // LOAD SIMILAR CASES
+        // ============================================
+
+        async function loadSimilarCases() {
+
+            try {
+
+                const response = await fetch(
+                    `http://127.0.0.1:8000/similar/${caseId}?top_n=6`
+                );
+
+                const similarCases =
+                    await response.json();
+
+                const container =
+                    document.getElementById(
+                        "similar-cases-container"
+                    );
+
+                similarCases.forEach(similarCase => {
+
+    const similarityPercent = (
+        similarCase.similarity_score * 100
+    ).toFixed(1);
+
+    let similarityClass = "";
+    let similarityTextClass = "text-white";
+
+    if (similarityPercent >= 70) {
+
+        similarityClass = "bg-success";
+
+    }
+    else if (similarityPercent >= 50) {
+
+        similarityClass = "bg-warning";
+
+        similarityTextClass = "text-dark";
+
+    }
+    else {
+
+        similarityClass = "bg-danger";
+
+    }
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "col-lg-4 col-md-6 mb-4";
+
+    card.innerHTML = `
+
+        <a 
+            href="case.html?id=${similarCase.id}"
+            class="text-decoration-none text-dark"
+        >
+
+            <div class="similar-card">
+
+                <img 
+                    src="https://namus.gov/api/CaseSets/NamUs/MissingPersons/Cases/${similarCase.id}/Images/Default/Poster"
+                    class="similar-image"
+                />
+
+                <div class="similar-name">
+                    Case #${similarCase.id}
+                </div>
+
+                <div class="mt-2">
+                    ${similarCase.topic_category || "OTHER"}
+                </div>
+
+                <span
+                    class="
+                        badge-custom
+                        mt-2
+                        d-inline-block
+                        ${similarityClass}
+                        ${similarityTextClass}
+                    "
+                >
+                    ${similarityPercent}% Match
+                </span>
+
+                <div class="mt-3">
+                    ${similarCase.description.substring(0, 140)}...
+                </div>
+
+            </div>
+
+        </a>
+
+    `;
+
+    container.appendChild(card);
+
+});
+
+            } catch (error) {
+
+                console.error(
+                    "Error loading similar cases:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // ============================================
+        // INIT
+        // ============================================
+
+        loadCaseDetails();
+
+        loadSimilarCases();
+
+    </script>
+
+    <script>
+
+        const menuBtn =
+            document.getElementById(
+                "menu-btn"
+            );
+
+        const sidebar =
+            document.getElementById(
+                "mobile-sidebar"
+            );
+
+        const overlay =
+            document.getElementById(
+                "sidebar-overlay"
+            );
+
+        const closeBtn =
+            document.getElementById(
+                "close-sidebar"
+            );
+
+
+        menuBtn.addEventListener(
+            "click",
+            () => {
+
+                sidebar.classList.add(
+                    "open"
+                );
+
+                overlay.classList.add(
+                    "show"
+                );
+
+            }
+        );
+
+        closeBtn.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+        overlay.addEventListener(
+            "click",
+            closeSidebar
+        );
+
+        function closeSidebar() {
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+            overlay.classList.remove(
+                "show"
+            );
+
+        }
+
+    </script>
+
+
+</body>
+</html>
