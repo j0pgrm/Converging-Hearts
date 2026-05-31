@@ -230,8 +230,14 @@
 
 
 from fastapi import FastAPI
+import pandas as pd
+import numpy as np
 
 app = FastAPI()
+
+df = pd.read_json(
+    "data/categorized_cases.json"
+)
 
 @app.get("/")
 def home():
