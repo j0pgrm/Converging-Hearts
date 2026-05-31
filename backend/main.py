@@ -244,3 +244,7 @@ def home():
     return {
         "message": "Backend working"
     }
+
+embeddings = np.load(
+    "data/description_embeddings.npy"
+)
