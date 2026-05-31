@@ -235,8 +235,24 @@ import numpy as np
 
 app = FastAPI()
 
+# Test 1 (already passed)
 df = pd.read_json(
     "data/categorized_cases.json"
+)
+
+# Test 2 (already passed)
+embeddings = np.load(
+    "data/description_embeddings.npy"
+)
+
+# Test 3 (already passed)
+cases_df = pd.read_json(
+    "data/cases.json"
+)
+
+# NEW TEST
+full_cases_df = pd.read_json(
+    "data/output.json"
 )
 
 @app.get("/")
@@ -244,11 +260,3 @@ def home():
     return {
         "message": "Backend working"
     }
-
-embeddings = np.load(
-    "data/description_embeddings.npy"
-)
-
-full_cases_df = pd.read_json(
-    "data/output.json"
-)
