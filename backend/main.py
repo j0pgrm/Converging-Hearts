@@ -45,9 +45,8 @@ embeddings = np.load(
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 HF_API_URL = (
-    "https://router.huggingface.co/hf-inference/"
-    "models/sentence-transformers/"
-    "all-MiniLM-L6-v2"
+    "https://api-inference.huggingface.co/models/"
+    "sentence-transformers/all-MiniLM-L6-v2"
 )
 
 
@@ -61,7 +60,10 @@ def get_query_embedding(text):
         HF_API_URL,
         headers=headers,
         json={
-            "inputs": text
+            "inputs": text,
+            "options": {
+                "wait_for_model": True
+            }
         },
         timeout=30
     )
