@@ -1,3 +1,5 @@
+import os 
+import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -35,6 +37,42 @@ full_cases_df = full_cases_df.replace(
 embeddings = np.load(
     "data/description_embeddings.npy"
 )
+
+
+# 
+
+
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+HF_API_URL = (
+    "https://router.huggingface.co/hf-inference/"
+    "models/sentence-transformers/"
+    "all-MiniLM-L6-v2"
+)
+
+
+def get_query_embedding(text):
+
+    headers = {
+        "Authorization": f"Bearer {HF_TOKEN}"
+    }
+
+    response = requests.post(
+        HF_API_URL,
+        headers=headers,
+        json={
+            "inputs": text
+        },
+        timeout=30
+    )
+
+    response.raise_for_status()
+
+    return response.json()
+
+
+# 
+
 
 
 @app.get("/")
@@ -135,47 +173,37 @@ def find_similar_cases(
         orient="records"
     )
 
-# @app.get("/search")
-# def semantic_search(
-#     query: str,
-#     top_n: int = 5
-# ):
 
-#     global model
 
-#     if model is None:
+@app.get("/search")
+def semantic_search(
+    query: str,
+    top_n: int = 20
+):
 
-#         print(
-#             "Loading SentenceTransformer..."
-#         )
+    query_embedding = np.array(
+        get_query_embedding(query)
+    ).reshape(1, -1)
 
-#         model = SentenceTransformer(
-#             "all-MiniLM-L6-v2"
-#         )
+    similarities = cosine_similarity(
+        query_embedding,
+        embeddings
+    )[0]
 
-#     query_embedding = model.encode(
-#         [query]
-#     )
+    top_indices = similarities.argsort()[
+        -top_n:
+    ][::-1]
 
-#     similarities = cosine_similarity(
-#         query_embedding,
-#         embeddings
-#     )[0]
+    results = df.iloc[top_indices][[
+        "id",
+        "description",
+        "topic_category"
+    ]].copy()
 
-#     top_indices = similarities.argsort()[
-#         -top_n:
-#     ][::-1]
+    results["similarity_score"] = (
+        similarities[top_indices]
+    )
 
-#     results = df.iloc[top_indices][[
-#         "id",
-#         "description",
-#         "topic_category"
-#     ]].copy()
-
-#     results["similarity_score"] = (
-#         similarities[top_indices]
-#     )
-
-#     return results.to_dict(
-#         orient="records"
-#     )
+    return results.to_dict(
+        orient="records"
+    )
