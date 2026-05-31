@@ -235,22 +235,22 @@ import numpy as np
 
 app = FastAPI()
 
-# Test 1 (already passed)
 df = pd.read_json(
     "data/categorized_cases.json"
 )
 
-# Test 2 (already passed)
+df = df.replace(
+    {np.nan: None}
+)
+
 embeddings = np.load(
     "data/description_embeddings.npy"
 )
 
-# Test 3 (already passed)
 cases_df = pd.read_json(
     "data/cases.json"
 )
 
-# NEW TEST
 full_cases_df = pd.read_json(
     "data/output.json"
 )
