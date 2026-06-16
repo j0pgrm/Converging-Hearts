@@ -66,6 +66,49 @@
             transition: 0.2s;
         }
 
+        .category-container {
+
+            display: flex;
+            flex-wrap: wrap;
+
+            gap: 12px;
+
+            justify-content: center;
+
+            margin-top: 30px;
+        }
+
+        .category-btn {
+
+            background: white;
+
+            border: 2px solid #1f4f82;
+
+            color: #1f4f82;
+
+            padding: 12px 20px;
+
+            border-radius: 30px;
+
+            font-weight: 600;
+
+            transition: 0.2s;
+        }
+
+        .category-btn:hover {
+
+            background: #1f4f82;
+
+            color: white;
+        }
+
+        .category-btn.active {
+
+            background: #1f4f82;
+
+            color: white;
+        }
+
         .custom-navbar .nav-link:hover {
 
             color: #1f4f82;
@@ -550,27 +593,77 @@
 
         <div class="search-container">
 
-            <form 
-                class="d-flex"
-                id="search-form"
-            >
+            <div class="category-container">
 
-                <input
-                    type="text"
-                    class="form-control search-input"
-                    id="search-input"
-                    placeholder="Search disappearance circumstances..."
-                    style="border: none !important; color: black !important;"
-                />
-
-                <button
-                    class="search-button btn btn-primary ms-3 px-4"
-                    type="submit"
-                >
-                    <i class="fas fa-search"></i>
+                <button class="category-btn active" data-category="ALL">
+                    All Cases
                 </button>
 
-            </form>
+                <button class="category-btn" data-category="JUVENILE_RUNAWAY">
+                    Juvenile Runaway
+                </button>
+
+                <button class="category-btn" data-category="VOLUNTARY_WALKAWAY">
+                    Voluntary Walkaway
+                </button>
+
+                <button class="category-btn" data-category="POSSIBLE_CRIMINAL_ACTIVITY">
+                    Possible Criminal Activity
+                </button>
+
+                <button class="category-btn" data-category="FAMILY_ABDUCTION">
+                    Family Abduction
+                </button>
+
+                <button class="category-btn" data-category="HOMELESSNESS_RELATED">
+                    Homelessness Related
+                </button>
+
+                <button class="category-btn" data-category="FOUL_PLAY_SUSPECTED">
+                    Foul Play
+                </button>
+
+                <button class="category-btn" data-category="MENTAL_HEALTH_CRISIS">
+                    Mental Health Crisis
+                </button>
+
+                <button class="category-btn" data-category="CAMPING_OUTDOOR">
+                    Camping / Outdoors
+                </button>
+
+                <button class="category-btn" data-category="WINTER_ENVIRONMENT">
+                    Winter Environment
+                </button>
+
+                <button class="category-btn" data-category="PRESUMED_DROWNING">
+                    Presumed Drowning
+                </button>
+
+                <button class="category-btn" data-category="SOCIAL_EVENT_DISAPPEARANCE">
+                    Social Event
+                </button>
+
+                <button class="category-btn" data-category="BRIDGE_SUICIDE">
+                    Bridge Suicide
+                </button>
+
+                <button class="category-btn" data-category="VOLUNTARY_RUNAWAY">
+                    Voluntary Runaway
+                </button>
+
+                <button class="category-btn" data-category="VEHICLE_FOUND_AFTER_DISAPPEARANCE">
+                    Vehicle Found
+                </button>
+
+                <button class="category-btn" data-category="MEDICAL_VULNERABILITY">
+                    Medical Vulnerability
+                </button>
+
+                <button class="category-btn" data-category="SCHOOL_RELATED_DISAPPEARANCE">
+                    School Related
+                </button>
+
+            </div>
 
         </div>
 
@@ -614,6 +707,7 @@
         const CASES_PER_PAGE = 20;
         let currentPage = 1;
         let allCases = [];
+        let filteredCases = [];
 
         // ============================================
         // LOAD CASES
@@ -637,15 +731,14 @@
             );
         }
 
-        function renderPage(page) {
-
+        // 
+        function renderFilteredPage(page) {
             const container =
                 document.getElementById(
                     "cases-container"
                 );
 
             container.innerHTML = "";
-
             currentPage = page;
 
             const start =
@@ -657,11 +750,11 @@
             document.getElementById(
                 "case-count"
             ).innerHTML =
-                `Showing ${start + 1}-${Math.min(end, allCases.length)}
-                of ${allCases.length.toLocaleString()} cases`;
+                `Showing ${start + 1}-${Math.min(end, filteredCases.length)}
+                of ${filteredCases.length.toLocaleString()} cases`;
 
             const pageCases =
-                allCases.slice(start, end);
+                filteredCases.slice(start, end);
 
             pageCases.forEach(caseData => {
 
@@ -752,6 +845,10 @@
 
             renderPagination();
         }
+        // 
+
+
+
 
         function renderPagination() {
 
@@ -766,7 +863,7 @@
 
             const totalPages =
                 Math.ceil(
-                    allCases.length /
+                    filteredCases.length /
                     CASES_PER_PAGE
                 );
 
@@ -785,7 +882,7 @@
 
             prevBtn.addEventListener(
                 "click",
-                () => renderPage(currentPage - 1)
+                () => renderFilteredPage(currentPage - 1)
             );
 
             pagination.appendChild(prevBtn);
@@ -841,7 +938,7 @@
 
                     button.addEventListener(
                         "click",
-                        () => renderPage(i)
+                        () => renderFilteredPage(i)
                     );
 
                     pagination.appendChild(
@@ -865,7 +962,7 @@
 
             nextBtn.addEventListener(
                 "click",
-                () => renderPage(currentPage + 1)
+                () => renderFilteredPage(currentPage + 1)
             );
 
             pagination.appendChild(nextBtn);
@@ -880,12 +977,16 @@
                 ).style.display = "flex";
 
                 const response = await fetch(
-                    "https://converging-hearts.onrender.com/full-cases"
+                    "https://converging-hearts.onrender.com/homepage-cases"
                 );
 
-                allCases = await response.json();
+               allCases = await response.json();
 
-                renderPage(1);
+               console.log(allCases[0]);
+
+                filteredCases = allCases;
+
+                renderFilteredPage(1);
 
             } catch (error) {
 
@@ -897,169 +998,71 @@
             }
 
         }
-
-
-        // ============================================
-        // SEMANTIC SEARCH
-        // ============================================
-
-        async function semanticSearch(query) {
-
-            try {
-
-                document.getElementById(
-                    "pagination-container"
-                ).style.display = "none";
-
-                document.getElementById(
-                    "pagination-container"
-                ).innerHTML = "";
-
-                document.getElementById(
-                    "case-count"
-                ).innerHTML =
-                    `Showing top semantic matches for:
-                    "${query}"`;
-
-                const response = await fetch(
-                    `https://converging-hearts.onrender.com/search?query=${encodeURIComponent(query)}&top_n=20`
-                );
-
-                const cases = await response.json();
-
-                const container =
-                    document.getElementById(
-                        "cases-container"
-                    );
-
-                container.innerHTML = "";
-
-                cases.forEach(caseData => {
-
-                    const firstName =
-                        caseData["subjectIdentification.firstName"] || "";
-
-                    const lastName =
-                        caseData["subjectIdentification.lastName"] || "";
-
-                    const fullName =
-                        `${firstName} ${lastName}`.trim();
-
-                    const imageUrl =
-                        "https://namus.gov/api/CaseSets/NamUs/MissingPersons/Cases/" +
-                        caseData.id +
-                        "/Images/Default/Poster";
-
-                    const card =
-                        document.createElement("a");
-
-                    card.href =
-                        `case.html?id=${caseData.id}`;
-
-                    card.className =
-                        "text-decoration-none text-dark";
-
-                    
-                    const similarityPercent = (
-                        caseData.similarity_score * 100
-                    ).toFixed(1);
-
-                    let badgeClass = "";
-
-                    if (similarityPercent >= 70) {
-                        badgeClass = "bg-success text-white";
-                    }
-                    else if (similarityPercent >= 50) {
-                        badgeClass = "bg-warning text-dark";
-                    }
-                    else {
-                        badgeClass = "bg-danger text-white";
-                    }
-
-
-                    card.innerHTML = `
-
-                        <div class="case-card d-flex">
-
-                            <div class="case-image-container">
-
-                                <img
-                                    src="${imageUrl}"
-                                    alt="${fullName}"
-                                    class="case-image"
-                                />
-
-                            </div>
-
-                            <div class="case-right flex-grow-1">
-
-                                <div class="d-flex justify-content-between align-items-start">
-
-                                    <h2 class="case-name">
-                                        ${fullName || "Unknown"}
-                                    </h2>
-
-                                    <span class="badge-custom ${badgeClass}" style="font-weight: 600">
-                                        ${similarityPercent}% Match
-                                    </span>
-
-                                </div>
-
-                                <div class="case-description">
-
-                                    ${caseData.description}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    `;
-
-                    container.appendChild(card);
-
-                });
-
-            } catch(error) {
-
-                console.error(
-                    "Search error:",
-                    error
-                );
-
-            }
-
-        }
-
-
-        // ============================================
-        // SEARCH FORM
-        // ============================================
+    </script>
+        
+    <script>
 
         document
-            .getElementById("search-form")
-            .addEventListener(
-                "submit",
-                function(event) {
+        .querySelectorAll(
+            ".category-btn"
+        )
+        .forEach(btn => {
 
-                    event.preventDefault();
+            btn.addEventListener(
+                "click",
+                () => {
 
-                    const query =
-                        document.getElementById(
-                            "search-input"
-                        ).value;
+                    document
+                        .querySelectorAll(
+                            ".category-btn"
+                        )
+                        .forEach(
+                            b =>
+                            b.classList.remove(
+                                "active"
+                            )
+                        );
 
-                    if(query.trim() === "") {
-                        loadCases();
-                        return;
-                    }
+                    btn.classList.add(
+                        "active"
+                    );
 
-                    semanticSearch(query);
+                    filterByCategory(
+                        btn.dataset.category
+                    );
 
                 }
             );
 
+        });
+
+        function filterByCategory(
+            category
+        ) {
+
+            currentPage = 1;
+
+            if (
+                category === "ALL"
+            ) {
+
+                filteredCases =
+                    allCases;
+
+            } else {
+
+                filteredCases =
+                    allCases.filter(
+                        c =>
+                        c.topic_category ===
+                        category
+                    );
+
+            }
+
+            renderFilteredPage(1);
+
+        }
 
         // ============================================
         // INIT
@@ -1142,15 +1145,3 @@
 </body>
 </html>
 
-
-
-
-<!-- 
-
-how to run backend 
-
-.\venv\Scripts\activate
-uvicorn backend.main:app --reload
-
-
--->

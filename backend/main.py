@@ -1,5 +1,3 @@
-import os 
-import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -39,51 +37,28 @@ embeddings = np.load(
 )
 
 
-# 
-
-
-HF_TOKEN = os.getenv("HF_TOKEN")
-
-HF_API_URL = (
-    "https://api-inference.huggingface.co/models/"
-    "sentence-transformers/all-MiniLM-L6-v2"
-)
-
-
-def get_query_embedding(text):
-
-    headers = {
-        "Authorization": f"Bearer {HF_TOKEN}"
-    }
-
-    response = requests.post(
-        HF_API_URL,
-        headers=headers,
-        json={
-            "inputs": text,
-            "options": {
-                "wait_for_model": True
-            }
-        },
-        timeout=30
-    )
-
-    return {
-        "status": response.status_code,
-        "text": response.text
-    }
-
-
-# 
-
-
-
 @app.get("/")
 def home():
 
     return {
         "message": "Missing Person Similarity API Running"
     }
+
+@app.get("/homepage-cases")
+def homepage_cases():
+
+    merged = full_cases_df.merge(
+        df[[
+            "id",
+            "topic_category"
+        ]],
+        on="id",
+        how="left"
+    )
+
+    return merged.to_dict(
+        orient="records"
+    )
 
 @app.get("/cases")
 def get_cases():
@@ -211,10 +186,10 @@ def find_similar_cases(
 #         orient="records"
 #     )
 
-@app.get("/search")
-def semantic_search(
-    query: str,
-    top_n: int = 20
-):
+# @app.get("/search")
+# def semantic_search(
+#     query: str,
+#     top_n: int = 20
+# ):
 
-    return get_query_embedding(query)
+#     return get_query_embedding(query)
