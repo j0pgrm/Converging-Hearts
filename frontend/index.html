@@ -130,7 +130,8 @@
             background-size: cover;
             background-position: center;
 
-            height: 350px;
+            height: auto;
+            padding: 100px 0px;  
 
             display: flex;
             align-items: center;
@@ -518,7 +519,7 @@
                     <li class="nav-item">
                         <a
                             class="nav-link"
-                            href="https://github.com/yourusername/project"
+                            href="https://github.com/j0pgrm/Converging-Hearts"
                             target="_blank"
                         >
                             GitHub
@@ -561,7 +562,7 @@
         </a>
 
         <a
-            href="https://github.com/yourusername/project"
+            href="https://github.com/j0pgrm/Converging-Hearts"
             target="_blank"
         >
             GitHub
@@ -978,6 +979,7 @@
 
                 const response = await fetch(
                     "https://converging-hearts.onrender.com/homepage-cases"
+                    // "http://127.0.0.1:8000/homepage-cases"
                 );
 
                allCases = await response.json();
@@ -1145,3 +1147,26 @@
 </body>
 </html>
 
+
+
+
+<!-- 
+
+how to run backend 
+
+.\venv\Scripts\activate
+uvicorn backend.main:app --reload
+
+
+
+<!-- 
+
+To DO: 
+
+1. Run frontend and backend, then go to https://converging-hearts.onrender.com/docs#/
+2. Check if /homepage-cases is on there 
+3. If not, then keep trying to add it
+4. If yes, then go to ChatGPT, go to conversation titled "Coverging Hearts Categories", and tell it that you have /homepage-cases and I'd like to keep going with 
+    filtering cases by category 
+
+-->
