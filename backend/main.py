@@ -56,6 +56,13 @@ def homepage_cases():
         how="left"
     )
 
+    # Convert pandas NaN values to Python None
+    # so FastAPI can return valid JSON
+    merged = merged.astype(object).where(
+        pd.notnull(merged),
+        None
+    )
+
     return merged.to_dict(
         orient="records"
     )
