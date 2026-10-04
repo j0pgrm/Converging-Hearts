@@ -37,6 +37,22 @@ embeddings = np.load(
 )
 
 
+# Merge homepage data ONCE when server starts
+homepage_df = full_cases_df.merge(
+    df[[
+        "id",
+        "topic_category"
+    ]],
+    on="id",
+    how="left"
+)
+
+homepage_df = homepage_df.astype(object).where(
+    pd.notnull(homepage_df),
+    None
+)
+
+
 @app.get("/")
 def home():
 
@@ -45,27 +61,38 @@ def home():
     }
 
 @app.get("/homepage-cases")
-def homepage_cases():
+def homepage_cases(
+    page: int = 1,
+    limit: int = 20,
+    category: str = "ALL"
+):
 
-    merged = full_cases_df.merge(
-        df[[
-            "id",
-            "topic_category"
-        ]],
-        on="id",
-        how="left"
-    )
+    # Filter category
+    if category == "ALL":
+        filtered = homepage_df
+    else:
+        filtered = homepage_df[
+            homepage_df["topic_category"] == category
+        ]
 
-    # Convert pandas NaN values to Python None
-    # so FastAPI can return valid JSON
-    merged = merged.astype(object).where(
-        pd.notnull(merged),
-        None
-    )
+    total = len(filtered)
 
-    return merged.to_dict(
-        orient="records"
-    )
+    # Calculate which rows to return
+    start = (page - 1) * limit
+    end = start + limit
+
+    page_cases = filtered.iloc[start:end]
+
+    return {
+        "cases": page_cases.to_dict(
+            orient="records"
+        ),
+        "total": total,
+        "page": page,
+        "total_pages": (
+            total + limit - 1
+        ) // limit
+    }
 
 @app.get("/cases")
 def get_cases():
