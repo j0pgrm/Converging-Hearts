@@ -655,20 +655,16 @@ select:not([multiple]) {
 
 
 
-/* ==========================================
-   SPEECH VIDEO
-========================================== */
-
-.content-container video {
-    display: block;
-
+.video-container {
     width: 100%;
     max-width: 1000px;
-    height: auto;
 
     margin: 0 auto 50px auto;
 
+    aspect-ratio: 16 / 9;
+
     border-radius: 12px;
+    overflow: hidden;
 
     box-shadow:
         0 4px 15px rgba(0, 0, 0, 0.15);
@@ -676,14 +672,21 @@ select:not([multiple]) {
     background-color: black;
 }
 
+.video-container iframe {
+    width: 100%;
+    height: 100%;
 
-/* ==========================================
-   TABLET
-========================================== */
+    display: block;
+
+    border: none;
+}
+
+
+/* TABLET */
 
 @media (max-width: 900px) {
 
-    .content-container video {
+    .video-container {
         max-width: 100%;
         margin-bottom: 35px;
         border-radius: 10px;
@@ -692,18 +695,13 @@ select:not([multiple]) {
 }
 
 
-/* ==========================================
-   MOBILE
-========================================== */
+/* MOBILE */
 
 @media (max-width: 600px) {
 
-    .content-container video {
+    .video-container {
         width: 100%;
-        max-width: 100%;
-
         margin-bottom: 30px;
-
         border-radius: 8px;
     }
 
