@@ -720,9 +720,13 @@
     <script>
 
         const CASES_PER_PAGE = 20;
+
         let currentPage = 1;
-        let allCases = [];
-        let filteredCases = [];
+        let currentCategory = "ALL";
+
+        let currentCases = [];
+        let totalCases = 0;
+        let totalPages = 0;
 
         // ============================================
         // LOAD CASES
@@ -747,273 +751,318 @@
         }
 
         // 
-        function renderFilteredPage(page) {
-            const container =
-                document.getElementById(
-                    "cases-container"
-                );
+        function renderCases() {
 
-            container.innerHTML = "";
-            currentPage = page;
+    const container =
+        document.getElementById(
+            "cases-container"
+        );
 
-            const start =
-                (page - 1) * CASES_PER_PAGE;
+    container.innerHTML = "";
 
-            const end =
-                start + CASES_PER_PAGE;
+    const start =
+        (currentPage - 1) * CASES_PER_PAGE + 1;
 
-            document.getElementById(
-                "case-count"
-            ).innerHTML =
-                `Showing ${start + 1}-${Math.min(end, filteredCases.length)}
-                of ${filteredCases.length.toLocaleString()} cases`;
+    const end =
+        Math.min(
+            currentPage * CASES_PER_PAGE,
+            totalCases
+        );
 
-            const pageCases =
-                filteredCases.slice(start, end);
+    document.getElementById(
+        "case-count"
+    ).innerHTML =
+        totalCases > 0
+        ? `Showing ${start}-${end} of ${totalCases.toLocaleString()} cases`
+        : "No cases found";
 
-            pageCases.forEach(caseData => {
+    currentCases.forEach(caseData => {
 
-                const firstName =
-                    caseData["subjectIdentification.firstName"] || "";
+        const firstName =
+            caseData["subjectIdentification.firstName"] || "";
 
-                const lastName =
-                    caseData["subjectIdentification.lastName"] || "";
+        const lastName =
+            caseData["subjectIdentification.lastName"] || "";
 
-                const fullName =
-                    `${firstName} ${lastName}`.trim();
+        const fullName =
+            `${firstName} ${lastName}`.trim();
 
-                const imageUrl =
-                    "https://namus.gov" +
-                    caseData.hrefDefaultImagePoster;
+        const imageUrl =
+            "https://namus.gov" +
+            caseData.hrefDefaultImagePoster;
 
-                const city =
-                    caseData["sighting.address.city"] || "Unknown";
+        const city =
+            caseData["sighting.address.city"] || "Unknown";
 
-                const state =
-                    caseData["sighting.address.state.name"] || "Unknown";
+        const state =
+            caseData["sighting.address.state.name"] || "Unknown";
 
-                const sex =
-                    caseData["subjectDescription.sex.name"] || "Unknown";
+        const sex =
+            caseData["subjectDescription.sex.name"] || "Unknown";
 
-                const age =
-                    caseData["subjectIdentification.computedMissingMinAge"] || "Unknown";
+        const age =
+            caseData["subjectIdentification.computedMissingMinAge"] || "Unknown";
 
-                const card =
-                    document.createElement("a");
+        const card =
+            document.createElement("a");
 
-                card.href =
-                    `case.html?id=${caseData.id}`;
+        card.href =
+            `case.html?id=${caseData.id}`;
 
-                card.className =
-                    "text-decoration-none text-dark";
+        card.className =
+            "text-decoration-none text-dark";
 
-                card.innerHTML = `
+        card.innerHTML = `
 
-                    <div class="case-card d-flex">
+            <div class="case-card d-flex">
 
-                        <div class="case-image-container">
+                <div class="case-image-container">
 
-                            <img
-                                src="${imageUrl}"
-                                alt="${fullName}"
-                                class="case-image"
-                            />
+                    <img
+                        src="${imageUrl}"
+                        alt="${fullName}"
+                        class="case-image"
+                    />
 
-                        </div>
+                </div>
 
-                        <div class="case-right flex-grow-1">
+                <div class="case-right flex-grow-1">
 
-                            <div class="d-flex justify-content-between align-items-start">
+                    <div class="d-flex justify-content-between align-items-start">
 
-                                <h2 class="case-name">
-                                    ${fullName}
-                                </h2>
+                        <h2 class="case-name">
+                            ${fullName}
+                        </h2>
 
-                                <span class="badge-custom">
-                                    Case #${caseData.id}
-                                </span>
-
-                            </div>
-
-                            <div class="case-meta">
-                                <strong>Sex:</strong> ${sex}
-                            </div>
-
-                            <div class="case-meta">
-                                <strong>Location:</strong>
-                                ${city}, ${state}
-                            </div>
-
-                            <div class="case-meta">
-                                <strong>Missing Age:</strong> ${age}
-                            </div>
-
-                        </div>
+                        <span class="badge-custom">
+                            Case #${caseData.id}
+                        </span>
 
                     </div>
 
-                `;
+                    <div class="case-meta">
+                        <strong>Sex:</strong> ${sex}
+                    </div>
 
-                container.appendChild(card);
+                    <div class="case-meta">
+                        <strong>Location:</strong>
+                        ${city}, ${state}
+                    </div>
 
-            });
+                    <div class="case-meta">
+                        <strong>Missing Age:</strong> ${age}
+                    </div>
 
-            renderPagination();
-        }
-        // 
+                </div>
 
+            </div>
 
+        `;
+
+        container.appendChild(card);
+
+    });
+
+    renderPagination();
+}
 
 
         function renderPagination() {
 
-            const pagination =
-                document.getElementById(
-                    "pagination-container"
-                );
+    const pagination =
+        document.getElementById(
+            "pagination-container"
+        );
 
-            pagination.innerHTML = "";
+    pagination.innerHTML = "";
 
-            const isMobile = window.innerWidth < 768;
+    if (totalPages <= 1) {
+        return;
+    }
 
-            const totalPages =
-                Math.ceil(
-                    filteredCases.length /
-                    CASES_PER_PAGE
-                );
+    const isMobile =
+        window.innerWidth < 768;
 
-            // PREVIOUS BUTTON
 
-            const prevBtn =
-                document.createElement("button");
+    // PREVIOUS BUTTON
 
-            prevBtn.textContent = "← Previous";
+    const prevBtn =
+        document.createElement("button");
 
-            prevBtn.className =
-                "pagination-btn mx-1";
+    prevBtn.textContent =
+        "← Previous";
 
-            prevBtn.disabled =
-                currentPage === 1;
+    prevBtn.className =
+        "pagination-btn mx-1";
 
-            prevBtn.addEventListener(
-                "click",
-                () => renderFilteredPage(currentPage - 1)
+    prevBtn.disabled =
+        currentPage === 1;
+
+    prevBtn.addEventListener(
+        "click",
+        () => loadCases(
+            currentPage - 1
+        )
+    );
+
+    pagination.appendChild(
+        prevBtn
+    );
+
+
+    // PAGE NUMBERS
+
+    if (isMobile) {
+
+        const currentBtn =
+            document.createElement("button");
+
+        currentBtn.textContent =
+            currentPage;
+
+        currentBtn.className =
+            "btn btn-primary mx-1";
+
+        pagination.appendChild(
+            currentBtn
+        );
+
+    } else {
+
+        let startPage =
+            Math.max(
+                1,
+                currentPage - 2
             );
 
-            pagination.appendChild(prevBtn);
-
-            // PAGE NUMBERS
-
-            if (isMobile) {
-
-                const currentBtn =
-                    document.createElement("button");
-
-                currentBtn.textContent =
-                    currentPage;
-
-                currentBtn.className =
-                    "btn btn-primary mx-1";
-
-                pagination.appendChild(
-                    currentBtn
-                );
-
-            } else {
-
-                let startPage =
-                    Math.max(
-                        1,
-                        currentPage - 2
-                    );
-
-                let endPage =
-                    Math.min(
-                        totalPages,
-                        currentPage + 2
-                    );
-
-                for (
-                    let i = startPage;
-                    i <= endPage;
-                    i++
-                ) {
-
-                    const button =
-                        document.createElement(
-                            "button"
-                        );
-
-                    button.textContent = i;
-
-                    button.className =
-                        i === currentPage
-                        ? "btn btn-primary mx-1 pagination-btn-active"
-                        : "btn btn-outline-primary mx-1 pagination-btn";
-
-                    button.addEventListener(
-                        "click",
-                        () => renderFilteredPage(i)
-                    );
-
-                    pagination.appendChild(
-                        button
-                    );
-                }
-            }
-
-            // NEXT BUTTON
-
-            const nextBtn =
-                document.createElement("button");
-
-            nextBtn.textContent = "Next →";
-
-            nextBtn.className =
-                "pagination-btn mx-1";
-
-            nextBtn.disabled =
-                currentPage === totalPages;
-
-            nextBtn.addEventListener(
-                "click",
-                () => renderFilteredPage(currentPage + 1)
+        let endPage =
+            Math.min(
+                totalPages,
+                currentPage + 2
             );
 
-            pagination.appendChild(nextBtn);
-        }
+        for (
+            let i = startPage;
+            i <= endPage;
+            i++
+        ) {
 
-        async function loadCases() {
-
-            try {
-
-                document.getElementById(
-                    "pagination-container"
-                ).style.display = "flex";
-
-                const response = await fetch(
-                    "https://converging-hearts.onrender.com/homepage-cases"
-                    // "http://127.0.0.1:8000/homepage-cases"
+            const button =
+                document.createElement(
+                    "button"
                 );
 
-               allCases = await response.json();
+            button.textContent = i;
 
-               console.log(allCases[0]);
+            button.className =
+                i === currentPage
+                ? "btn btn-primary mx-1 pagination-btn-active"
+                : "btn btn-outline-primary mx-1 pagination-btn";
 
-                filteredCases = allCases;
+            button.addEventListener(
+                "click",
+                () => loadCases(i)
+            );
 
-                renderFilteredPage(1);
+            pagination.appendChild(
+                button
+            );
+        }
+    }
 
-            } catch (error) {
 
-                console.error(
-                    "Error loading cases:",
-                    error
-                );
+    // NEXT BUTTON
 
-            }
+    const nextBtn =
+        document.createElement("button");
+
+    nextBtn.textContent =
+        "Next →";
+
+    nextBtn.className =
+        "pagination-btn mx-1";
+
+    nextBtn.disabled =
+        currentPage === totalPages;
+
+    nextBtn.addEventListener(
+        "click",
+        () => loadCases(
+            currentPage + 1
+        )
+    );
+
+    pagination.appendChild(
+        nextBtn
+    );
+}
+
+        
+    async function loadCases(page = 1) {
+
+    try {
+
+        const container =
+            document.getElementById(
+                "cases-container"
+            );
+
+        container.innerHTML = `
+            <div class="loading-text">
+                Loading cases...
+            </div>
+        `;
+
+        const url =
+            `https://converging-hearts.onrender.com/homepage-cases?page=${page}&limit=${CASES_PER_PAGE}&category=${encodeURIComponent(currentCategory)}`;
+
+        const response =
+            await fetch(url);
+
+        if (!response.ok) {
+
+            throw new Error(
+                `HTTP error: ${response.status}`
+            );
 
         }
+
+        const data =
+            await response.json();
+
+        currentCases =
+            data.cases;
+
+        totalCases =
+            data.total;
+
+        totalPages =
+            data.total_pages;
+
+        currentPage =
+            data.page;
+
+        renderCases();
+
+    } catch (error) {
+
+        console.error(
+            "Error loading cases:",
+            error
+        );
+
+        document.getElementById(
+            "cases-container"
+        ).innerHTML = `
+            <div class="loading-text">
+                Error loading cases.
+            </div>
+        `;
+
+    }
+}
+    
+
     </script>
         
     <script>
@@ -1052,32 +1101,13 @@
 
         });
 
-        function filterByCategory(
-            category
-        ) {
+        function filterByCategory(category) {
+
+            currentCategory = category;
 
             currentPage = 1;
 
-            if (
-                category === "ALL"
-            ) {
-
-                filteredCases =
-                    allCases;
-
-            } else {
-
-                filteredCases =
-                    allCases.filter(
-                        c =>
-                        c.topic_category ===
-                        category
-                    );
-
-            }
-
-            renderFilteredPage(1);
-
+            loadCases(1);
         }
 
         // ============================================
