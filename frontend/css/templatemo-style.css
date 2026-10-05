@@ -652,3 +652,59 @@ select:not([multiple]) {
 
     .tm-social-links li { margin-right: 3px; }
 }
+
+
+
+/* ==========================================
+   SPEECH VIDEO
+========================================== */
+
+.content-container video {
+    display: block;
+
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+
+    margin: 0 auto 50px auto;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 4px 15px rgba(0, 0, 0, 0.15);
+
+    background-color: black;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 900px) {
+
+    .content-container video {
+        max-width: 100%;
+        margin-bottom: 35px;
+        border-radius: 10px;
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .content-container video {
+        width: 100%;
+        max-width: 100%;
+
+        margin-bottom: 30px;
+
+        border-radius: 8px;
+    }
+
+}
